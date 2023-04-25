@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+  align-content: center;
+  justify-content: center;
+}
+
+h1 {
+  text-align: center;
+}
+
+.HangmanGame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.HangmanGame-word {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.HangmanGame-guesses {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.HangmanGame-guesses span {
+  margin-right: 5px;
+}
+
+.HangmanGame-remaining-guesses {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.HangmanGame-definition {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.HangmanGame-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.HangmanGame-buttons button {
+  font-size: 24px;
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.HangmanGame-buttons button:disabled {
+  background-color: #6c757d;
+  cursor: default;
+}
+
+.HangmanGame-buttons button:hover:not(:disabled) {
+  background-color: #0069d9;
+}
+
+.HangmanGame-game-over {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.HangmanGame-hangman img {
+  width: 400px;
+}
