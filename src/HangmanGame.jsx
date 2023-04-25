@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
 import "./HangmanGame.css";
+import Hangman from "./Hangman.jsx";
+import React, { useState, useEffect, useCallback } from "react";
 
 const HangmanGame = () => {
   const [word, setWord] = useState("");
@@ -7,26 +8,29 @@ const HangmanGame = () => {
   const [guesses, setGuesses] = useState([]);
   const [remainingGuesses, setRemainingGuesses] = useState(6);
 
-  useEffect(() => {
-    fetchWord();
-  }, []);
-
   const fetchDefinition = async (word) => {
-    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    const response = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+    );
     const data = await response.json();
     if (data.length > 0 && data[0].meanings.length > 0) {
       setDefinition(data[0].meanings[0].definitions[0].definition);
     }
   };
-  const fetchWord = async () => {
+
+  const fetchWord = useCallback(async () => {
     const response = await fetch("https://random-word-api.herokuapp.com/word");
     const data = await response.json();
     const word = data[0];
     setWord(word);
     fetchDefinition(word);
-  };
+  }, [fetchDefinition]);
 
-  const handleGuess = letter => {
+  useEffect(() => {
+    fetchWord();
+  }, []);
+
+  const handleGuess = (letter) => {
     if (!guesses.includes(letter)) {
       setGuesses([...guesses, letter]);
       if (!word.includes(letter)) {
@@ -37,7 +41,7 @@ const HangmanGame = () => {
 
   const wordLetters = word.split("");
 
-  const guessWord = wordLetters.map(letter =>
+  const guessWord = wordLetters.map((letter) =>
     guesses.includes(letter) ? letter : "_"
   );
 
@@ -47,7 +51,7 @@ const HangmanGame = () => {
     <div className="HangmanGame">
       <h1>{guessWord.join(" ")}</h1>
       <div className="HangmanGame-guesses">
-        {guesses.map(letter => (
+        {guesses.map((letter) => (
           <span key={letter}>{letter}</span>
         ))}
       </div>
@@ -62,7 +66,7 @@ const HangmanGame = () => {
       <div className="HangmanGame-definition">{definition}</div>
       <div className="HangmanGame-buttons">
         {!isGameOver &&
-          "abcdefghijklmnopqrstuvwxyz".split("").map(letter => (
+          "abcdefghijklmnopqrstuvwxyz".split("").map((letter) => (
             <button
               key={letter}
               onClick={() => handleGuess(letter)}
@@ -71,12 +75,10 @@ const HangmanGame = () => {
               {letter}
             </button>
           ))}
-        {isGameOver && (
-          <button onClick={() => fetchWord()}>Play Again</button>
-        )}
+        {isGameOver && <button onClick={() => fetchWord()}>Play Again</button>}
       </div>
       <div className="HangmanGame-hangman">
-      <img src={`images/hangman-${remainingGuesses}.png`} alt="Hangman" />
+      <Hangman guesses={guesses} word={word} />
       </div>
     </div>
   );
